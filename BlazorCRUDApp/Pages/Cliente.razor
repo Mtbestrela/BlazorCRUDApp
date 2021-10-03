@@ -1,0 +1,64 @@
+﻿@page "/cliente/{id}"
+@inject BlazorCRUDApp.Data.IClienteService ClienteService ;
+@inject NavigationManager Navigation 
+
+<EditForm Model="cliente" OnSubmit="@SubmitForm" >
+    <div class="form-group">
+        <label>Código Identificador</label>
+        <input id="id" class="form-control" name="id" value="@cliente.Id" readonly />
+    </div>
+    <div class="form-group">
+        <label>Nome do Cliente</label>
+        <InputText id="name" class="form-control" name="name" @bind-Value="@cliente.Name"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Sobrenome do Cliente</label>
+        <InputText id="lastName" class="form-control" name="lastName" @bind-Value="@cliente.LastName"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Documento do Cliente (cpf ou cnpj)</label>
+        <InputText id="cpfcpj" class="form-control" name="cpfcnpj" @bind-Value="@cliente.CpfCnpj"></InputText>
+    </div>
+    <div class="form-group">
+        <label>E-mail do Cliente</label>
+        <InputText id="email" class="form-control" name="email" @bind-Value="@cliente.Email"></InputText>
+    </div>
+    <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private BlazorCRUDApp.Data.Cliente cliente { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(!string.IsNullOrEmpty(Id) & Id == "0")
+        {
+            cliente = new Data.Cliente();
+        }
+        else
+        {
+            cliente = ClienteService.GetCliente(Guid.Parse(Id));
+        }
+
+
+    }
+
+    private void SubmitForm()
+    {
+        if(cliente.Id == Guid.Empty)
+        {
+            ClienteService.AddCliente(cliente);
+        }
+        else
+        {
+            ClienteService.UpdateCliente(cliente);
+        }
+
+
+        Navigation.NavigateTo("clientes");
+    }
+
+}

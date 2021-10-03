@@ -1,0 +1,55 @@
+﻿@page "/clientes"
+@inject BlazorCRUDApp.Data.IClienteService ClienteService ;
+
+<h1>Todos os Clientes</h1>
+<br />
+<button><a href="cliente/0">Adicionar Cliente</a></button>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Código Identificador</td>
+            <td>Nome</td>
+            <td>Sobrenome</td>
+            <td>Cpf ou Cnpj</td>
+            <td>E-mail</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in clientes)
+        {
+            <tr>
+                <td>@cliente.Id</td>
+                <td>@cliente.Name</td>
+                <td>@cliente.LastName</td>
+                <td>@cliente.CpfCnpj</td>
+                <td>@cliente.Email</td>
+                <td>
+                    <a href="cliente/@cliente.Id">
+                        Editar
+                    </a>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick = "@(e=> OnDelete(cliente.Id))">Deletar</button>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<BlazorCRUDApp.Data.Cliente> clientes;
+
+    protected override void OnInitialized()
+    {
+        clientes = ClienteService.GetClientes();
+    }
+
+    private void OnDelete(Guid id)
+    {
+        ClienteService.DeleteCliente(id);
+    }
+
+}
