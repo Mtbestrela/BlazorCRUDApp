@@ -2,7 +2,12 @@
 @inject BlazorCRUDApp.Data.IClienteService ClienteService ;
 @inject NavigationManager Navigation 
 
-<EditForm Model="cliente" OnSubmit="@SubmitForm" >
+
+
+<EditForm Model="cliente" OnValidSubmit="@SubmitForm" >
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    
     <div class="form-group">
         <label>Código Identificador</label>
         <input id="id" class="form-control" name="id" value="@cliente.Id" readonly />
@@ -24,6 +29,7 @@
         <InputText id="email" class="form-control" name="email" @bind-Value="@cliente.Email"></InputText>
     </div>
     <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
+    
 </EditForm>
 
 @code {
